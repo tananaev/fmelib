@@ -6,3 +6,6 @@
 /build
 /captures
 /lib/build
+.idea/
+fmelib.iml
+lib/lib.iml
