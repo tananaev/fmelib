@@ -5,7 +5,7 @@
 .DS_Store
 /build
 /captures
-/lib/build
+/fmelib/build
 .idea/
 fmelib.iml
-lib/lib.iml
+fmelib/fmelib.iml
