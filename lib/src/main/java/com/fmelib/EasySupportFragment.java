@@ -15,15 +15,19 @@
  */
 package com.fmelib;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
-
-import java.util.Collection;
-import java.util.LinkedList;
 
 public class EasySupportFragment extends Fragment {
 
     public void runWhenResumed(Task task) {
         FragmentUtil.runWhenResumed(this, task);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
     }
 
     @Override

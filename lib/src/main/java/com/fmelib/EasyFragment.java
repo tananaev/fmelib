@@ -18,15 +18,19 @@ package com.fmelib;
 import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.os.Build;
-
-import java.util.Collection;
-import java.util.LinkedList;
+import android.os.Bundle;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class EasyFragment extends Fragment {
 
     public void runWhenResumed(Task task) {
         FragmentUtil.runWhenResumed(this, task);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
     }
 
     @Override
