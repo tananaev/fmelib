@@ -5,10 +5,16 @@ Android library that makes [Fragments](http://developer.android.com/guide/compon
 * Stop worrying about configuration changes
 * Create anounymous or inner-classes fragments
 
+## Download
+Just include Gradle dependency into your project:
+```groovy
+compile 'com.fmelib:fmelib:0.0.2'
+```
+
 ## Callbacks and listeners
 
 It was always a pain to handle various asynchronous callbacks is fragments because fragments can be re-created by Android. With retained fragments and magic `runWhenResumed(Task)` method, you don't need to worry about it any more.
-```Java
+```java
 class LoginFragment extends EasyFragment {
     ...
     public void login() {
@@ -33,7 +39,7 @@ Awesome `runWhenResumed(Task)` helps here as well. If you are using it for all l
 ## Anonymous fragments
 
 Why do you need so much code to create a simple fragment? Google says that it should be static or outer class with default public constructor. Forget all those annoying rules and make your new fragment inline with just a few lines of code.
-```Java
+```java
 final String error = ...;
 Fragment errorFragment = new EasyDialogFragment() {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
