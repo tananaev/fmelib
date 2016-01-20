@@ -15,16 +15,18 @@ compile 'com.fmelib:fmelib:0.0.2'
 
 It was always a pain to handle various asynchronous callbacks is fragments because fragments can be re-created by Android. With retained fragments and magic `runWhenResumed(Task)` method, you don't need to worry about it any more.
 ```java
-class LoginFragment extends EasyFragment {
+public class LoginFragment extends EasyFragment {
     ...
     public void login() {
         sendLoginRequest(new LoginRequestCallback() {
-            public void onSuccess(final String userName) {
+            @Override
+            public void onSuccess(final String user) {
                 runWhenResumed(new Task() {
+                    @Override
                     public void run(boolean fragmentDestroyed) {
-                        ((TextView) getView().findViewById(R.id.user)).setText(userName);
+                        if (!fragmentDestroyed) {
+                            startMainActivity(user);
     ...
-}
 ```
 Task will be executed immediately if fragment is active. If it's not currently active, the task will be executed when fragment is resumed. If fragment is destroyed, task will be executed with `fragmentDestroyed` flag allowing you to handle this situation.
 
@@ -40,21 +42,20 @@ Awesome `runWhenResumed(Task)` helps here as well. If you are using it for all l
 
 Why do you need so much code to create a simple fragment? Google says that it should be static or outer class with default public constructor. Forget all those annoying rules and make your new fragment inline with just a few lines of code.
 ```java
-final String error = ...;
-Fragment errorFragment = new EasyDialogFragment() {
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new AlertDialog.Builder(getContext())
-                .setMessage(error)
-                .setPositiveButton(android.R.string.ok,
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            getActivity().finish();
-                        }
-                    }
-                )
-                .create();
-    }
-};
+final String user = getIntent().getStringExtra(USER_KEY);
+
+findViewById(R.id.welcome_button).setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        DialogFragment dialog = new EasyDialogFragment() {
+            @Override
+            public Dialog onCreateDialog(Bundle savedInstanceState) {
+                return new AlertDialog.Builder(getActivity())
+                        .setMessage(String.format(getString(R.string.message), user))
+                        .setPositiveButton(android.R.string.ok, null)
+                        .create();
+            }
+        };
 ```
 How easy is that? Access methods and variables from outer class or method using standard Java code. Make your code shorted, simpler and easier to read.
 
