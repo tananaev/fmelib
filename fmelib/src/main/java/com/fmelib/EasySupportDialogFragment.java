@@ -15,6 +15,7 @@
  */
 package com.fmelib;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 
@@ -40,6 +41,15 @@ public class EasySupportDialogFragment extends DialogFragment {
     public void onDestroy() {
         super.onDestroy();
         FragmentUtil.onDestroy(this);
+    }
+
+    @Override
+    public void onDestroyView() {
+        Dialog dialog = getDialog();
+        if (dialog != null && getRetainInstance()) {
+            dialog.setDismissMessage(null);
+        }
+        super.onDestroyView();
     }
 
 }

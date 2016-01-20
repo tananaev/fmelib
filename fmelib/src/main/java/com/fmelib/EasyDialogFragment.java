@@ -16,6 +16,7 @@
 package com.fmelib;
 
 import android.annotation.TargetApi;
+import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Build;
 import android.os.Bundle;
@@ -43,6 +44,15 @@ public class EasyDialogFragment extends DialogFragment {
     public void onDestroy() {
         super.onDestroy();
         FragmentUtil.onDestroy(this);
+    }
+
+    @Override
+    public void onDestroyView() {
+        Dialog dialog = getDialog();
+        if (dialog != null && getRetainInstance()) {
+            dialog.setDismissMessage(null);
+        }
+        super.onDestroyView();
     }
 
 }
