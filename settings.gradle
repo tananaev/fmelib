@@ -1,1 +1,1 @@
-include ':fmelib'
+include ':fmelib', ':samples'

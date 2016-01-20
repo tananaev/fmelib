@@ -6,6 +6,8 @@
 /build
 /captures
 /fmelib/build
-.idea/
+.idea
 fmelib.iml
 fmelib/fmelib.iml
+fmelib/fmelib-fmelib.iml
+samples/build
