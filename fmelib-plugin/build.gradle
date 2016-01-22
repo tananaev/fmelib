@@ -1,0 +1,12 @@
+apply plugin: 'groovy'
+
+targetCompatibility = JavaVersion.VERSION_1_7
+sourceCompatibility = JavaVersion.VERSION_1_7
+
+dependencies {
+  compile gradleApi()
+  compile localGroovy()
+  compile 'com.android.tools.build:gradle:1.1.0-rc3'
+  compile 'org.aspectj:aspectjtools:1.8.5'
+  compile 'org.aspectj:aspectjrt:1.8.5'
+}
