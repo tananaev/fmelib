@@ -1,5 +1,10 @@
 apply plugin: 'com.android.application'
-//apply plugin: 'com.fmelib.fmelib-plugin'
+
+dependencies {
+    compile project(':fmelib-core')
+}
+
+apply plugin: 'com.fmelib.fmelib-plugin'
 
 android {
     compileSdkVersion 23

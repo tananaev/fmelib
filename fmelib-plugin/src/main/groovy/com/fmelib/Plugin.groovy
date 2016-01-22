@@ -27,7 +27,7 @@ public class Plugin implements org.gradle.api.Plugin<Project> {
         }
 
         project.dependencies {
-            compile 'com.fmelib:fmelib-core:1.0'
+            //compile 'com.fmelib:fmelib-core:1.0'
             compile 'org.aspectj:aspectjrt:1.8.8'
         }
 

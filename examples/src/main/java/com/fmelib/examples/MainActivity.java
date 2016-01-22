@@ -5,7 +5,10 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+
+import com.fmelib.RunWhenResumed;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.welcome_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                doSomething();
                 DialogFragment dialog = new DialogFragment() {
                     @Override
                     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -35,6 +39,11 @@ public class MainActivity extends AppCompatActivity {
                 dialog.show(getFragmentManager(), DIALOG_TAG);
             }
         });
+    }
+
+    @RunWhenResumed
+    private void doSomething() {
+        Log.d("MainActivity", "onClick");
     }
 
 }
