@@ -8,11 +8,14 @@ import org.aspectj.tools.ajc.Main
 import org.gradle.api.Project
 
 public class Plugin implements org.gradle.api.Plugin<Project> {
-    @Override void apply(Project project) {
+
+    @Override
+    void apply(Project project) {
+
         def hasApp = project.plugins.withType(AppPlugin)
         def hasLib = project.plugins.withType(LibraryPlugin)
         if (!hasApp && !hasLib) {
-            throw new IllegalStateException("'android' or 'android-library' plugin required.")
+            throw new IllegalStateException("android plugin required")
         }
 
         final def log = project.logger
@@ -24,7 +27,7 @@ public class Plugin implements org.gradle.api.Plugin<Project> {
         }
 
         project.dependencies {
-            compile 'org.aspectj:aspectjrt:1.8.5'
+            compile 'org.aspectj:aspectjrt:1.8.8'
         }
 
         variants.all { variant ->
@@ -62,6 +65,8 @@ public class Plugin implements org.gradle.api.Plugin<Project> {
                     }
                 }
             }
+
         }
     }
+
 }
