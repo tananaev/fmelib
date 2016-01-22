@@ -1,4 +1,4 @@
-package com.fmelib.samples;
+package com.fmelib.examples;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

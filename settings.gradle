@@ -1,1 +1,1 @@
-include ':fmelib', ':examples'
+include ':fmelib-core', ':examples'
