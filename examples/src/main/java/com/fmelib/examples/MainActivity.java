@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.fmelib.EasyDialogFragment;
-
 public class MainActivity extends AppCompatActivity {
 
     public static final String USER_KEY = "user";
@@ -24,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.welcome_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment dialog = new EasyDialogFragment() {
+                DialogFragment dialog = new DialogFragment() {
                     @Override
                     public Dialog onCreateDialog(Bundle savedInstanceState) {
                         return new AlertDialog.Builder(getActivity())

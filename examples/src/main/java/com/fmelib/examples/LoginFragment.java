@@ -1,5 +1,6 @@
 package com.fmelib.examples;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,10 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.fmelib.EasyFragment;
-import com.fmelib.Task;
-
-public class LoginFragment extends EasyFragment {
+public class LoginFragment extends Fragment {
 
     @Nullable
     @Override
@@ -32,14 +30,7 @@ public class LoginFragment extends EasyFragment {
         sendLoginRequest(new LoginRequestCallback() {
             @Override
             public void onSuccess(final String user) {
-                runWhenResumed(new Task() {
-                    @Override
-                    public void run(boolean fragmentDestroyed) {
-                        if (!fragmentDestroyed) {
-                            startMainActivity(user);
-                        }
-                    }
-                });
+                startMainActivity(user);
             }
         });
     }
