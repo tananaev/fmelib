@@ -21,7 +21,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class EasyFragment extends Fragment implements Resumer {
+public class EasySupportFragment extends Fragment implements Resumer {
 
     public void runWhenResumed(Task task) {
         FragmentUtil.runWhenResumed(this, task);
@@ -44,4 +44,5 @@ public class EasyFragment extends Fragment implements Resumer {
         super.onDestroy();
         FragmentUtil.onDestroy(this);
     }
+
 }

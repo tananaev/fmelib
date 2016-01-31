@@ -8,8 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
-import com.fmelib.RunWhenResumed;
-
 public class MainActivity extends AppCompatActivity {
 
     public static final String USER_KEY = "user";
@@ -41,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    @RunWhenResumed
     private void doSomething() {
         Log.d("MainActivity", "onClick");
     }
