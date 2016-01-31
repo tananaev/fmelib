@@ -10,7 +10,7 @@ buildscript {
 
 buildscript {
     repositories {
-        flatDir dirs: "$projectDir/fmelib-plugin/build/libs"
+        flatDir dirs: "$projectDir/fmelib-plugin/libs"
     }
     dependencies {
         classpath "com.fmelib:fmelib-plugin:1.0"
