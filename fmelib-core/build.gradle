@@ -5,12 +5,12 @@ import org.aspectj.tools.ajc.Main
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion '23.0.2'
+    compileSdkVersion 24
+    buildToolsVersion '24.0.0'
 
     defaultConfig {
         minSdkVersion 4
-        targetSdkVersion 23
+        targetSdkVersion 24
         versionCode 1
         versionName '1.0'
     }
@@ -20,14 +20,14 @@ android {
 
 dependencies {
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:support-v4:23.1.1'
-    compile 'org.aspectj:aspectjrt:1.8.8'
+    compile 'com.android.support:support-v4:24.0.0'
+    compile 'org.aspectj:aspectjrt:1.8.9'
 }
 
 
 android {
     compileSdkVersion 23
-    buildToolsVersion '23.0.2'
+    buildToolsVersion '24.0.0'
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
