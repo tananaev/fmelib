@@ -12,22 +12,19 @@ public class Plugin implements org.gradle.api.Plugin<Project> {
     @Override
     void apply(Project project) {
 
-        def hasApp = project.plugins.withType(AppPlugin)
-        def hasLib = project.plugins.withType(LibraryPlugin)
-        if (!hasApp && !hasLib) {
-            throw new IllegalStateException("android plugin required")
+        if (!(project.plugins.hasPlugin(LibraryPlugin) || project.plugins.hasPlugin(AppPlugin))) {
+            throw new IllegalStateException('fmelib plugin can only be applied to android projects')
         }
 
-        final def log = project.logger
-        final def variants
-        if (hasApp) {
-            variants = project.android.applicationVariants
-        } else {
+        def variants
+        if (project.plugins.hasPlugin(LibraryPlugin)) {
             variants = project.android.libraryVariants
+        } else {
+            variants = project.android.applicationVariants
         }
 
         project.dependencies {
-            // TODO: compile 'com.tananaev.fmelib:fmelib-core:1.0'
+            compile 'com.tananaev:fmelib-core:1.0'
             compile 'org.aspectj:aspectjrt:1.8.9'
         }
 

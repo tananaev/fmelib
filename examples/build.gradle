@@ -1,17 +1,12 @@
 apply plugin: 'com.android.application'
-
-dependencies {
-    compile project(':fmelib-core')
-}
-
-apply plugin: 'com.fmelib.fmelib-plugin'
+apply plugin: 'com.tananaev.fmelib-plugin'
 
 android {
     compileSdkVersion 24
     buildToolsVersion "24.0.0"
 
     defaultConfig {
-        applicationId "com.fmelib.samples"
+        applicationId "com.tananaev.fmelib.samples"
         minSdkVersion 15
         targetSdkVersion 24
         versionCode 1
@@ -27,4 +22,5 @@ android {
 dependencies {
     compile 'com.android.support:appcompat-v7:24.0.0'
     compile 'com.android.support:design:24.0.0'
+    compile 'com.tananaev:fmelib-core:1.0'
 }

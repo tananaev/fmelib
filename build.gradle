@@ -5,15 +5,7 @@ buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:2.1.2"
         classpath 'org.aspectj:aspectjtools:1.8.9'
-    }
-}
-
-buildscript {
-    repositories {
-        flatDir dirs: "$projectDir/fmelib-plugin/libs"
-    }
-    dependencies {
-        classpath "com.fmelib:fmelib-plugin:1.0"
+        classpath "com.tananaev:fmelib-plugin:1.0"
     }
 }
 
