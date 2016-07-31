@@ -12,7 +12,7 @@ import org.aspectj.lang.annotation.Pointcut;
 public class FragmentAspect {
     public static final String LIB_TAG = "FMElib: ";
 
-    @Pointcut("execution(@com.fmelib.RunWhenResumed void *(..))")
+    @Pointcut("execution(@com.tananaev.fmelib.RunWhenResumed void *(..))")
     public void method() {
     }
 
