@@ -3,6 +3,11 @@ import org.aspectj.bridge.MessageHandler
 import org.aspectj.tools.ajc.Main
 
 apply plugin: 'com.android.library'
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+group = 'com.tananaev'
+version = '1.0'
 
 android {
     compileSdkVersion 24
@@ -69,4 +74,74 @@ android.libraryVariants.all { variant ->
             }
         }
     }
+}
+
+if (project.hasProperty('ossrhUsername') && project.hasProperty('ossrhPassword')) {
+
+    task androidJavadocs(type: Javadoc) {
+        source = android.sourceSets.main.java.srcDirs
+    }
+
+    task androidJavadocsJar(type: Jar) {
+        classifier = 'javadoc'
+        from androidJavadocs.destinationDir
+    }
+
+    task androidSourcesJar(type: Jar) {
+        classifier = 'sources'
+        from android.sourceSets.main.java.srcDirs
+    }
+
+    artifacts {
+        archives androidJavadocsJar, androidSourcesJar
+    }
+
+    signing {
+        sign configurations.archives
+    }
+
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+                repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                    authentication(userName: ossrhUsername, password: ossrhPassword)
+                }
+
+                snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                    authentication(userName: ossrhUsername, password: ossrhPassword)
+                }
+
+                pom.project {
+                    name 'fmelib-core'
+                    packaging 'jar'
+                    description 'Fragments Made Easy library core.'
+                    url 'https://github.com/tananaev/fmelib'
+
+                    scm {
+                        connection 'scm:git:https://github.com/tananaev/fmelib'
+                        developerConnection 'scm:git:git@github.com:tananaev/fmelib.git'
+                        url 'https://github.com/tananaev/fmelib'
+                    }
+
+                    licenses {
+                        license {
+                            name 'Apache License, Version 2.0'
+                            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id 'tananaev'
+                            name 'Anton Tananaev'
+                            email 'anton.tananaev@gmail.com'
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }
