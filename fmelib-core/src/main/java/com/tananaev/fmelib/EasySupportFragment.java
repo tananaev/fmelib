@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.fmelib;
+package com.tananaev.fmelib;
 
 import android.annotation.TargetApi;
-import android.app.Fragment;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class EasySupportFragment extends Fragment implements Resumer {

@@ -1,4 +1,4 @@
-package com.fmelib;
+package com.tananaev.fmelib;
 
 
 public interface Resumer {

@@ -1,4 +1,4 @@
-package com.fmelib;
+package com.tananaev.fmelib;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;

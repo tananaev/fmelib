@@ -1,4 +1,4 @@
-package com.fmelib;
+package com.tananaev.fmelib;
 
 import android.app.Fragment;
 import android.util.Log;

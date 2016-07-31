@@ -1,4 +1,4 @@
-package com.fmelib;
+package com.tananaev.fmelib;
 
 import java.util.Arrays;
 import java.util.HashSet;
