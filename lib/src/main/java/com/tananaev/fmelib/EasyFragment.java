@@ -28,7 +28,7 @@ public class EasyFragment extends Fragment {
     private boolean started;
 
     public void runWhenStarted(Task task) {
-        if (!started) { // TODO inverse when finish debugging
+        if (started) {
             task.run(false);
         } else {
             retainedFragment.storeTask(this, task);

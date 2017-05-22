@@ -17,9 +17,7 @@ package com.tananaev.fmelib;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 public class RetainedFragment extends Fragment {
@@ -27,7 +25,6 @@ public class RetainedFragment extends Fragment {
     private static final String TAG = RetainedFragment.class.getSimpleName();
     private static final String KEY_STORE = "store";
 
-    private boolean saved;
     private EasyFragment parent;
 
     private final ArrayList<Bundle> coldStore = new ArrayList<>();
@@ -46,14 +43,14 @@ public class RetainedFragment extends Fragment {
     }
 
     public void onParentStart(EasyFragment parent) {
-        for (Bundle bundle : coldStore) {
-            deserializeTask(parent, bundle).run(false);
-        }
-        coldStore.clear();
         for (Task task : hotStore) {
-            task.run(false);
+            coldStore.add(TaskSerializer.serializeTask(parent, task));
         }
         hotStore.clear();
+        for (Bundle bundle : coldStore) {
+            TaskSerializer.deserializeTask(parent, bundle).run(false);
+        }
+        coldStore.clear();
     }
 
     public void onParentCreate(EasyFragment parent) {
@@ -63,7 +60,7 @@ public class RetainedFragment extends Fragment {
     public void onParentDestroy(EasyFragment parent) {
         if (parent.isRemoving()) {
             for (Bundle bundle : coldStore) {
-                deserializeTask(parent, bundle).run(true);
+                TaskSerializer.deserializeTask(parent, bundle).run(true);
             }
             coldStore.clear();
             for (Task task : hotStore) {
@@ -72,7 +69,7 @@ public class RetainedFragment extends Fragment {
             hotStore.clear();
         } else {
             for (Task task : hotStore) {
-                coldStore.add(serializeTask(parent, task));
+                coldStore.add(TaskSerializer.serializeTask(parent, task));
             }
             hotStore.clear();
         }
@@ -81,35 +78,20 @@ public class RetainedFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        saved = true;
         super.onSaveInstanceState(outState);
         for (Task task : hotStore) {
-            coldStore.add(serializeTask(parent, task));
+            coldStore.add(TaskSerializer.serializeTask(parent, task));
         }
         hotStore.clear();
         outState.putParcelableArrayList(KEY_STORE, coldStore);
     }
 
     public void storeTask(EasyFragment parent, Task task) {
-        if (saved) {
-            Log.w(TAG, "Impossible to store task at this stage");
-        } else if (parent == this.parent) {
+        if (parent == this.parent) {
             hotStore.add(task);
         } else {
-            coldStore.add(serializeTask(parent, task));
+            coldStore.add(TaskSerializer.serializeTask(parent, task));
         }
-    }
-
-    private static Bundle serializeTask(EasyFragment parent, Task task) {
-        // TODO: handle all options
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("task", (Serializable) task);
-        return bundle;
-    }
-
-    private static Task deserializeTask(EasyFragment parent, Bundle bundle) {
-        // TODO: handle all options
-        return (Task) bundle.getSerializable("task");
     }
 
 }
