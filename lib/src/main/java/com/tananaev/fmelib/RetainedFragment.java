@@ -22,7 +22,6 @@ import java.util.ArrayList;
 
 public class RetainedFragment extends Fragment {
 
-    private static final String TAG = RetainedFragment.class.getSimpleName();
     private static final String KEY_STORE = "store";
 
     private EasyFragment parent;
