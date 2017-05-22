@@ -4,37 +4,60 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.fmelib.EasySupportFragment;
-import com.fmelib.RunWhenResumed;
+import com.tananaev.fmelib.EasyFragment;
+import com.tananaev.fmelib.Task;
 
-public class LoginFragment extends EasySupportFragment {
+import java.io.Serializable;
+
+public class LoginFragment extends EasyFragment {
+
+    private static final String TAG = LoginFragment.class.getSimpleName();
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
-
-        view.findViewById(R.id.login_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                login();
-            }
-        });
-
+        view.findViewById(R.id.login_button).setOnClickListener(v -> loginLambda());
         return view;
     }
 
-    public void login() {
+    public void loginLambda() {
+        sendLoginRequest(user -> runWhenStarted(fragmentDestroyed -> {
+            Intent intent = new Intent(getActivity(), MainActivity.class);
+            intent.putExtra(MainActivity.USER_KEY, user);
+            startActivity(intent);
+        }));
+    }
+
+    public void loginSerializableLambda() {
+        sendLoginRequest(user -> runWhenStarted((Serializable & Task) fragmentDestroyed -> {
+            Log.i(TAG, user);
+        }));
+    }
+
+    public void loginClass() {
         sendLoginRequest(new LoginRequestCallback() {
             @Override
-            public void onSuccess(final String user) {
-                startMainActivity(user);
+            public void onSuccess(String user) {
+                runWhenStarted(new Task() {
+                    @Override
+                    public void run(boolean fragmentDestroyed) {
+                        Intent intent = new Intent(getActivity(), MainActivity.class);
+                        intent.putExtra(MainActivity.USER_KEY, user);
+                        startActivity(intent);
+                    }
+                });
             }
         });
+    }
+
+    public interface LoginRequestCallback {
+        void onSuccess(String user);
     }
 
     public void sendLoginRequest(final LoginRequestCallback callback) {
@@ -44,6 +67,7 @@ public class LoginFragment extends EasySupportFragment {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
+                    Log.w(TAG, e);
                 }
                 return null;
             }
@@ -53,17 +77,6 @@ public class LoginFragment extends EasySupportFragment {
                 callback.onSuccess("User");
             }
         }.execute();
-    }
-
-    @RunWhenResumed
-    public void startMainActivity(String user) {
-        Intent intent = new Intent(getActivity(), MainActivity.class);
-        intent.putExtra(MainActivity.USER_KEY, user);
-        startActivity(intent);
-    }
-
-    public interface LoginRequestCallback {
-        void onSuccess(String user);
     }
 
 }

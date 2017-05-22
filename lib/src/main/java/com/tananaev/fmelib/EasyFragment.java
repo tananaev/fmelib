@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Anton Tananaev (anton.tananaev@gmail.com)
+ * Copyright 2016 - 2017 Anton Tananaev (anton.tananaev@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,33 +15,50 @@
  */
 package com.tananaev.fmelib;
 
-import android.annotation.TargetApi;
-import android.app.Fragment;
-import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class EasyFragment extends Fragment implements Resumer {
+public class EasyFragment extends Fragment {
 
-    public void runWhenResumed(Task task) {
-        FragmentUtil.runWhenResumed(this, task);
+    private static final String FRAGMENT_TAG = "retainedFragment";
+
+    private RetainedFragment retainedFragment;
+
+    private boolean started;
+
+    public void runWhenStarted(Task task) {
+        if (!started) { // TODO inverse when finish debugging
+            task.run(false);
+        } else {
+            retainedFragment.storeTask(this, task);
+        }
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
+        if (savedInstanceState == null) {
+            retainedFragment = new RetainedFragment();
+            getChildFragmentManager().beginTransaction().add(retainedFragment, FRAGMENT_TAG).commit();
+        } else {
+            retainedFragment = (RetainedFragment) getChildFragmentManager().findFragmentByTag(FRAGMENT_TAG);
+        }
+        retainedFragment.onParentCreate(this);
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        FragmentUtil.onResume(this);
+    public void onStart() {
+        super.onStart();
+        started = true;
+        retainedFragment.onParentStart(this);
     }
 
     @Override
     public void onDestroy() {
+        retainedFragment.onParentDestroy(this);
+        started = false;
         super.onDestroy();
-        FragmentUtil.onDestroy(this);
     }
+
 }
