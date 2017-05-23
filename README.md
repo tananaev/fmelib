@@ -5,7 +5,7 @@ Android library that makes [Fragments](http://developer.android.com/guide/compon
 - Easy asynchronous callbacks management
 - Easy configuration change handling
 
-Main goal of the library is to allow developers focus more about business logic they are implementing and think less about properly handling fragment lifecycle.
+Main goal of the library is to allow developers focus more about business logic they are implementing and think less about proper handling of fragment lifecycle.
 
 Current version of the library only provides classes based on Android Support Library Fragment, so you have to include Support Library dependency if you want to use `EasyFragment`.
 
