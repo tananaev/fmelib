@@ -5,7 +5,7 @@
     android:layout_width="match_parent">
 
     <fragment
-        android:name="com.fmelib.examples.LoginFragment"
+        android:name="com.example.app.LoginFragment"
         android:id="@+id/login_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

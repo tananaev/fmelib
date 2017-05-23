@@ -1,4 +1,4 @@
-package com.fmelib.examples;
+package com.example.app;
 
 import android.content.Intent;
 import android.os.AsyncTask;

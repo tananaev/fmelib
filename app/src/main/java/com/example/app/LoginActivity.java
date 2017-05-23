@@ -1,4 +1,4 @@
-package com.fmelib.examples;
+package com.example.app;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
