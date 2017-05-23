@@ -20,7 +20,7 @@ import android.support.v4.app.Fragment;
 
 import java.util.ArrayList;
 
-public class RetainedFragment extends Fragment {
+public final class RetainedFragment extends Fragment {
 
     private static final String KEY_STORE = "store";
 
