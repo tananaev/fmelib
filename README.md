@@ -1,8 +1,11 @@
 # Fragments Made Easy
 
 Android library that makes [Fragments](http://developer.android.com/guide/components/fragments.html) easy to work with.
-- Really simple asynchronous calls management
-- Stop worrying about saving fragment state
+
+- Easy asynchronous callbacks management
+- Easy configuration change handling
+
+Main goal of the library is to allow developers focus more about business logic they are implementing and think less about properly handling fragment lifecycle.
 
 Current version of the library only provides classes based on Android Support Library Fragment, so you have to include Support Library dependency if you want to use `EasyFragment`.
 
