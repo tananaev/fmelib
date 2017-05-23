@@ -17,7 +17,7 @@ compile 'com.tananaev:fmelib:1.0'
 
 ## Callbacks and listeners
 
-It was always a pain to handle various asynchronous callbacks is fragments because fragments can be recreated by Android. With `EasyFragment` and magic `runWhenStarted(Task)` method you don't need to worry about it any more.
+It was always a pain to handle various asynchronous callbacks is fragments because fragments can be recreated by Android. With `EasyFragment` and magic `runWhenStarted(Task)` method you don't need to worry about it anymore.
 
 ```java
 public class LoginFragment extends EasyFragment {
@@ -34,15 +34,15 @@ public class LoginFragment extends EasyFragment {
 
 Task will be executed immediately if fragment is in started state. If it's not currently visible, the task will be executed when fragment is started. If fragment is destroyed, task will be executed with `fragmentDestroyed` flag allowing you to handle this condition as well.
 
-You can use anonymous clasess or lambda expressions for implementing `Task` interface. Library will automatically serialize your callback instance and associate it with a new fragment if your activity has been recreated. The only thing that you need to make sure that all extra variables captured by the class or lambda are `Serializable`.
+You can use anonymous clasess or lambda expressions for implementing `Task` interface. Nice benefit of this approach is that you can cache response using standard Java closure which makes code shorter and simpler. Library will automatically serialize your callback instance and associate it with a new fragment if your activity has been recreated.
 
-Nice benefit of this approach is that you can cache response using standard Java closure which makes code shorter and simpler.
+Just make sure that all extra variables captured by your `Task` class or lambda are `Serializable`.
 
 ## Fragment recreation
 
-Every Android developer knows the struggle of dealing with configuration changes. Some developers try to avoid it by using retained fragments or disabling activity recreation on certain configuration change events (e.g. orientation change), but the problem is that Android system can't guarantee that your activity will be kept alive. Even if it's not recreated on configuration change, it can be destroyed and recreated when Android is low on memory or some other exception circumstances.
+Every Android developer knows the struggle of dealing with configuration changes. Some developers try to avoid it by using retained fragments or disabling activity recreation on certain configuration change events (e.g. orientation change), but the problem is that Android system does not guarantee that your activity will be kept alive. Even if it is not recreated on configuration change, it can be destroyed and recreated when Android is low on memory or in some other exception circumstance.
 
-The library makes it easy to handle fragment recreation by automatically saving and restoring member variables that. All you need to do is mark fields that you want to save with `@EasySaveInstance` annotation. Any primitive types, Serializable and Parcelable variables are supported.
+The library makes it easy to handle fragment recreation by automatically saving and restoring member variables. All you need to do is mark fields that you want to save with `@EasySaveInstance` annotation. Any primitive types, Serializable and Parcelable variables are supported.
 
 ```java
 public class MainFragment extends EasyFragment {
@@ -52,17 +52,12 @@ public class MainFragment extends EasyFragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
-
         if (array == null) array = loadData(); // array is saved and recreated automatically
-
         view.findViewById(android.R.id.list).setAdapter(
             new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, array));
-
         return view;
     }
-
     ...
-}
 ```
 
 Awesome `runWhenStarted(Task)` method helps with managing recreation as well. If you are using it for all listeners and callbacks, you can be sure that nothing would be called during configuration change. Calls to `getView()` will always return valid and visible view of the fragment attached to the activity layout.
