@@ -1,8 +1,8 @@
 # Fragments Made Easy
 
 Android library that makes [Fragments](http://developer.android.com/guide/components/fragments.html) easy to work with.
-* Really simple asynchronous calls management
-* Stop worrying about saving fragment state
+- Really simple asynchronous calls management
+- Stop worrying about saving fragment state
 
 Current version of the library only provides classes based on Android Support Library Fragment, so you have to include Support Library dependency if you want to use `EasyFragment`.
 
@@ -14,7 +14,7 @@ compile 'com.tananaev:fmelib:1.0'
 
 ## Callbacks and listeners
 
-It was always a pain to handle various asynchronous callbacks is fragments because fragments can be re-created by Android. With `EasyFragment` and magic `runWhenStarted(Task)` method you don't need to worry about it any more.
+It was always a pain to handle various asynchronous callbacks is fragments because fragments can be recreated by Android. With `EasyFragment` and magic `runWhenStarted(Task)` method you don't need to worry about it any more.
 
 ```java
 public class LoginFragment extends EasyFragment {
@@ -62,12 +62,12 @@ public class MainFragment extends EasyFragment {
 }
 ```
 
-Awesome `runWhenStarted(Task)` method helps here as well. If you are using it for all listeners and callbacks, you can be sure that nothing would be called during configuration change. Calls to `getView()` will always return valid and visible view of the fragment attached to the activity layout.
+Awesome `runWhenStarted(Task)` method helps with managing recreation as well. If you are using it for all listeners and callbacks, you can be sure that nothing would be called during configuration change. Calls to `getView()` will always return valid and visible view of the fragment attached to the activity layout.
 
 ## Team
 
-[Anton Tananaev](https://github.com/tananaev)
-[Nader Ayyad](https://github.com/naderz)
+- [Anton Tananaev](https://github.com/tananaev)
+- [Nader Ayyad](https://github.com/naderz)
 
 ## License
 
