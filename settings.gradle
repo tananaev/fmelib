@@ -1,1 +1,2 @@
-include ':lib', ':app'
+rootProject.name = 'fmelib-root'
+include ':fmelib', ':app'
