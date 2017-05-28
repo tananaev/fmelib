@@ -3,7 +3,6 @@
 Android library that makes [Fragments](http://developer.android.com/guide/components/fragments.html) easy to work with.
 
 - Easy asynchronous callbacks management
-- Easy configuration change handling
 
 Main goal of the library is to allow developers focus more about business logic they are implementing and think less about proper handling of fragment lifecycle.
 
@@ -12,7 +11,7 @@ Current version of the library only provides classes based on Android Support Li
 ## Download
 Just include Gradle dependency into your project:
 ```groovy
-compile 'com.tananaev:fmelib:1.0'
+compile 'com.tananaev:fmelib:1.1'
 ```
 
 ## Callbacks and listeners
@@ -37,30 +36,6 @@ Task will be executed immediately if fragment is in started state. If it's not c
 You can use anonymous clasess or lambda expressions for implementing `Task` interface. Nice benefit of this approach is that you can cache response using standard Java closure which makes code shorter and simpler. Library will automatically serialize your callback instance and associate it with a new fragment if your activity has been recreated.
 
 Just make sure that all extra variables captured by your `Task` class or lambda are `Serializable`.
-
-## Fragment recreation
-
-Every Android developer knows the struggle of dealing with configuration changes. Some developers try to avoid it by using retained fragments or disabling activity recreation on certain configuration change events (e.g. orientation change), but the problem is that Android system does not guarantee that your activity will be kept alive. Even if it is not recreated on configuration change, it can be destroyed and recreated when Android is low on memory or in some other exception circumstance.
-
-The library makes it easy to handle fragment recreation by automatically saving and restoring member variables. All you need to do is mark fields that you want to save with `@EasySaveInstance` annotation. Any primitive types, Serializable and Parcelable variables are supported.
-
-```java
-public class MainFragment extends EasyFragment {
-
-    @EasySaveInstance
-    private ArrayList<String> array;
-
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
-        if (array == null) array = loadData(); // array is saved and recreated automatically
-        view.findViewById(android.R.id.list).setAdapter(
-            new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, array));
-        return view;
-    }
-    ...
-```
-
-Awesome `runWhenStarted(Task)` method helps with managing recreation as well. If you are using it for all listeners and callbacks, you can be sure that nothing would be called during configuration change. Calls to `getView()` will always return valid and visible view of the fragment attached to the activity layout.
 
 ## Team
 
