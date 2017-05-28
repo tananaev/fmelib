@@ -29,7 +29,7 @@ public class LoginFragment extends EasyFragment {
 
     public void loginLambda() {
         sendLoginRequest(user -> runWhenStarted(fragmentDestroyed -> {
-            Intent intent = EasyUtil.createFragmentIntent(getContext(), MainFragment.class);
+            Intent intent = EasyUtil.createAliasIntent(getContext(), ".MainActivity");
             intent.putExtra(MainFragment.KEY_USER, user);
             startActivity(intent);
         }));
@@ -48,7 +48,7 @@ public class LoginFragment extends EasyFragment {
                 runWhenStarted(new Task() {
                     @Override
                     public void run(boolean fragmentDestroyed) {
-                        Intent intent = EasyUtil.createFragmentIntent(getContext(), MainFragment.class);
+                        Intent intent = EasyUtil.createAliasIntent(getContext(), ".MainActivity");
                         intent.putExtra(MainFragment.KEY_USER, user);
                         startActivity(intent);
                     }

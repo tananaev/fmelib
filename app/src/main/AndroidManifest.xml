@@ -19,6 +19,13 @@
             </intent-filter>
         </activity>
 
+        <activity-alias
+            android:name="MainActivity"
+            android:targetActivity="com.tananaev.fmelib.EasyActivity"
+            android:parentActivityName="com.tananaev.fmelib.EasyActivity">
+            <meta-data android:name="defaultFragment" android:value=".MainFragment" />
+        </activity-alias>
+
     </application>
 
 </manifest>

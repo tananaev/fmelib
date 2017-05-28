@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 - 2017 Anton Tananaev (anton.tananaev@gmail.com)
+ * Copyright 2017 Anton Tananaev (anton.tananaev@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.tananaev.fmelib;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
@@ -24,9 +25,24 @@ public final class EasyUtil {
     private EasyUtil() {
     }
 
-    public static Intent createFragmentIntent(Context context, Class<? extends Fragment> fragmentClass) {
-        Intent intent = new Intent(context, EasyActivity.class);
+    public static Intent createFragmentIntent(
+            Context context, Class<? extends EasyActivity> activityClass, Class<? extends Fragment> fragmentClass) {
+        Intent intent = new Intent(context, activityClass);
         intent.putExtra(EasyActivity.KEY_CONTENT_FRAGMENT, fragmentClass);
+        return intent;
+    }
+
+    public static Intent createFragmentIntent(
+            Context context, Class<? extends Fragment> fragmentClass) {
+        return createFragmentIntent(context, EasyActivity.class, fragmentClass);
+    }
+
+    public static Intent createAliasIntent(Context context, String aliasName) {
+        Intent intent = new Intent();
+        if (aliasName.startsWith(".")) {
+            aliasName = context.getPackageName() + aliasName;
+        }
+        intent.setComponent(new ComponentName(context.getPackageName(), aliasName));
         return intent;
     }
 
