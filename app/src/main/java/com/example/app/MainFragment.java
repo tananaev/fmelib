@@ -9,15 +9,29 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.tananaev.fmelib.EasyFragment;
-import com.tananaev.fmelib.EasySaveInstance;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
 
+import icepick.Icepick;
+import icepick.State;
+
 public class MainFragment extends EasyFragment {
 
-    @EasySaveInstance
-    private ArrayList<String> array;
+    @State
+    protected ArrayList<String> array;
+
+    @Override
+    public void onRestoreInstanceState(Bundle inState) {
+        super.onRestoreInstanceState(inState);
+        Icepick.restoreInstanceState(this, inState);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Icepick.saveInstanceState(this, outState);
+    }
 
     @Nullable
     @Override
