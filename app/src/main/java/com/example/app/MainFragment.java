@@ -18,6 +18,8 @@ import icepick.State;
 
 public class MainFragment extends EasyFragment {
 
+    public static final String KEY_USER = "user";
+
     @State
     protected ArrayList<String> array;
 
@@ -31,6 +33,11 @@ public class MainFragment extends EasyFragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         Icepick.saveInstanceState(this, outState);
+    }
+
+    @Override
+    public CharSequence getTitle() {
+        return getArguments().getString(KEY_USER);
     }
 
     @Nullable

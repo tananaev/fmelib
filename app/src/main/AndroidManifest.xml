@@ -11,15 +11,13 @@
         android:theme="@style/AppTheme" >
 
         <activity
-            android:name="com.example.app.LoginActivity" >
+            android:name="com.tananaev.fmelib.EasyActivity" >
+            <meta-data android:name="defaultFragment" android:value=".LoginFragment" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name="com.example.app.MainActivity" />
 
     </application>
 

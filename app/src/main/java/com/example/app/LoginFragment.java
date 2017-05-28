@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.tananaev.fmelib.EasyFragment;
+import com.tananaev.fmelib.EasyUtil;
 import com.tananaev.fmelib.Task;
 
 import java.io.Serializable;
@@ -28,8 +29,8 @@ public class LoginFragment extends EasyFragment {
 
     public void loginLambda() {
         sendLoginRequest(user -> runWhenStarted(fragmentDestroyed -> {
-            Intent intent = new Intent(getActivity(), MainActivity.class);
-            intent.putExtra(MainActivity.USER_KEY, user);
+            Intent intent = EasyUtil.createFragmentIntent(getContext(), MainFragment.class);
+            intent.putExtra(MainFragment.KEY_USER, user);
             startActivity(intent);
         }));
     }
@@ -47,8 +48,8 @@ public class LoginFragment extends EasyFragment {
                 runWhenStarted(new Task() {
                     @Override
                     public void run(boolean fragmentDestroyed) {
-                        Intent intent = new Intent(getActivity(), MainActivity.class);
-                        intent.putExtra(MainActivity.USER_KEY, user);
+                        Intent intent = EasyUtil.createFragmentIntent(getContext(), MainFragment.class);
+                        intent.putExtra(MainFragment.KEY_USER, user);
                         startActivity(intent);
                     }
                 });
