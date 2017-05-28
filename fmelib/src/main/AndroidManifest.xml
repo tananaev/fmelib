@@ -6,6 +6,10 @@
 
         <activity android:name=".EasyActivity" />
 
+        <activity
+            android:name=".EasyDialogActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar.Translucent" />
+
     </application>
 
 </manifest>

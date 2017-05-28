@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,38 +24,16 @@ public class LoginFragment extends EasyFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
-        view.findViewById(R.id.login_button).setOnClickListener(v -> loginLambda());
+        view.findViewById(R.id.login_button).setOnClickListener(v -> login());
         return view;
     }
 
-    public void loginLambda() {
+    public void login() {
         sendLoginRequest(user -> runWhenStarted(fragmentDestroyed -> {
             Intent intent = EasyUtil.createAliasIntent(getContext(), ".MainActivity");
             intent.putExtra(MainFragment.KEY_USER, user);
             startActivity(intent);
         }));
-    }
-
-    public void loginSerializableLambda() {
-        sendLoginRequest(user -> runWhenStarted((Serializable & Task) fragmentDestroyed -> {
-            Log.i(TAG, user);
-        }));
-    }
-
-    public void loginClass() {
-        sendLoginRequest(new LoginRequestCallback() {
-            @Override
-            public void onSuccess(String user) {
-                runWhenStarted(new Task() {
-                    @Override
-                    public void run(boolean fragmentDestroyed) {
-                        Intent intent = EasyUtil.createAliasIntent(getContext(), ".MainActivity");
-                        intent.putExtra(MainFragment.KEY_USER, user);
-                        startActivity(intent);
-                    }
-                });
-            }
-        });
     }
 
     public interface LoginRequestCallback {

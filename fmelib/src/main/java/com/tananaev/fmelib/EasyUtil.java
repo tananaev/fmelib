@@ -18,6 +18,7 @@ package com.tananaev.fmelib;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 
 public final class EasyUtil {
@@ -43,6 +44,12 @@ public final class EasyUtil {
             aliasName = context.getPackageName() + aliasName;
         }
         intent.setComponent(new ComponentName(context.getPackageName(), aliasName));
+        return intent;
+    }
+
+    public static Intent createDialogIntent(Context context, Class<? extends DialogFragment> fragmentClass) {
+        Intent intent = new Intent(context, EasyDialogActivity.class);
+        intent.putExtra(EasyDialogActivity.KEY_CONTENT_FRAGMENT, fragmentClass);
         return intent;
     }
 
