@@ -71,17 +71,17 @@ class TaskSerializer {
             if (object instanceof Serializable) {
                 return object;
             } else {
+                Constructor constructor = object.getClass().getDeclaredConstructors()[0];
+                constructor.setAccessible(true);
+
                 Field[] fields = object.getClass().getDeclaredFields();
-                validateConstructor(parent, object.getClass().getDeclaredConstructors()[0], fields);
+                validateConstructor(parent, constructor, fields);
 
                 for (Field field : fields) {
                     field.setAccessible(true);
                 }
 
                 if (fields.length > 0 && !Serializable.class.isAssignableFrom(fields[0].getType())) {
-                    Constructor constructor = object.getClass().getDeclaredConstructors()[0];
-                    constructor.setAccessible(true);
-
                     Object[] parameters = new Object[constructor.getParameterTypes().length];
 
                     if (parent.getClass().equals(fields[0].getType())) {
