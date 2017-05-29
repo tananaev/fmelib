@@ -24,7 +24,7 @@ public final class RetainedFragment extends Fragment {
 
     private static final String KEY_STORE = "store";
 
-    private EasyFragment parent;
+    private boolean started;
 
     private final ArrayList<Bundle> coldStore = new ArrayList<>();
     private final ArrayList<Task> hotStore = new ArrayList<>();
@@ -41,25 +41,32 @@ public final class RetainedFragment extends Fragment {
         }
     }
 
-    public void onParentStart(EasyFragment parent) {
+    @Override
+    public void onStart() {
+        super.onStart();
+        started = true;
         for (Task task : hotStore) {
-            coldStore.add(TaskSerializer.serializeTask(parent, task));
+            coldStore.add(TaskSerializer.serializeTask(getParentFragment(), task));
         }
         hotStore.clear();
         for (Bundle bundle : coldStore) {
-            TaskSerializer.deserializeTask(parent, bundle).run(false);
+            TaskSerializer.deserializeTask(getParentFragment(), bundle).run(false);
         }
         coldStore.clear();
     }
 
-    public void onParentCreate(EasyFragment parent) {
-        this.parent = parent;
+    @Override
+    public void onStop() {
+        super.onStop();
+        started = false;
     }
 
-    public void onParentDestroy(EasyFragment parent) {
-        if (parent.isRemoving()) {
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        if (getParentFragment().isRemoving()) {
             for (Bundle bundle : coldStore) {
-                TaskSerializer.deserializeTask(parent, bundle).run(true);
+                TaskSerializer.deserializeTask(getParentFragment(), bundle).run(true);
             }
             coldStore.clear();
             for (Task task : hotStore) {
@@ -68,26 +75,32 @@ public final class RetainedFragment extends Fragment {
             hotStore.clear();
         } else {
             for (Task task : hotStore) {
-                coldStore.add(TaskSerializer.serializeTask(parent, task));
+                coldStore.add(TaskSerializer.serializeTask(getParentFragment(), task));
             }
             hotStore.clear();
         }
-        this.parent = null;
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         for (Task task : hotStore) {
-            coldStore.add(TaskSerializer.serializeTask(parent, task));
+            coldStore.add(TaskSerializer.serializeTask(getParentFragment(), task));
         }
         hotStore.clear();
         outState.putParcelableArrayList(KEY_STORE, coldStore);
     }
 
     public void storeTask(EasyFragment parent, Task task) {
-        if (parent == this.parent) {
+        if (parent == getParentFragment()) {
             hotStore.add(task);
+        } else if (getParentFragment() != null) {
+            Task updatedTask = TaskSerializer.updateTaskParent(getParentFragment(), task);
+            if (started) {
+                updatedTask.run(false);
+            } else {
+                hotStore.add(updatedTask);
+            }
         } else {
             coldStore.add(TaskSerializer.serializeTask(parent, task));
         }

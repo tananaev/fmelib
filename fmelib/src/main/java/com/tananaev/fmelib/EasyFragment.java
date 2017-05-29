@@ -48,24 +48,21 @@ public class EasyFragment extends Fragment {
         } else {
             retainedFragment = (RetainedFragment) getChildFragmentManager().findFragmentByTag(FRAGMENT_TAG);
         }
-        retainedFragment.onParentCreate(this);
     }
 
     @Override
     public void onStart() {
         super.onStart();
         started = true;
-        retainedFragment.onParentStart(this);
-    }
-
-    public void onRestoreInstanceState(Bundle inState) {
     }
 
     @Override
-    public void onDestroy() {
-        retainedFragment.onParentDestroy(this);
+    public void onStop() {
+        super.onStop();
         started = false;
-        super.onDestroy();
+    }
+
+    public void onRestoreInstanceState(Bundle inState) {
     }
 
 }

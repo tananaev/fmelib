@@ -16,6 +16,7 @@
 package com.tananaev.fmelib;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
@@ -31,15 +32,79 @@ class TaskSerializer {
     private static final String KEY_ARGUMENTS = "arguments";
     private static final String KEY_SERIALIZABLE = "serializable";
 
-    static Bundle serializeTask(EasyFragment parent, Task task) {
+    static Bundle serializeTask(Fragment parent, Task task) {
         return serializeObject(parent, task);
     }
 
-    static Task deserializeTask(EasyFragment parent, Bundle bundle) {
+    static Task deserializeTask(Fragment parent, Bundle bundle) {
         return (Task) deserializeObject(parent, bundle);
     }
 
-    private static Bundle serializeObject(EasyFragment parent, Object object) {
+    static Task updateTaskParent(Fragment parent, Task task) {
+        return (Task) updateObjectParent(parent, task);
+    }
+
+    private static void validateConstructor(Fragment parent, Constructor constructor, Field[] fields) {
+        if (fields.length != constructor.getParameterTypes().length) {
+            throw new IllegalArgumentException("Only anonymous classes and lambdas are supported");
+        }
+
+        for (int i = 0; i < fields.length; i++) {
+            if (!fields[i].getType().equals(constructor.getParameterTypes()[i])) {
+                throw new IllegalArgumentException("Only anonymous classes and lambdas are supported");
+            }
+
+            if (!Serializable.class.isAssignableFrom(fields[i].getType())) {
+                if (i == 0) {
+                    if (!fields[i].getType().getName().startsWith(parent.getClass().getName())) {
+                        throw new IllegalArgumentException("Captured variables have to be serializable");
+                    }
+                } else {
+                    throw new IllegalArgumentException("Captured variables have to be serializable");
+                }
+            }
+        }
+    }
+
+    private static Object updateObjectParent(Fragment parent, Object object) {
+        try {
+            if (object instanceof Serializable) {
+                return object;
+            } else {
+                Field[] fields = object.getClass().getDeclaredFields();
+                validateConstructor(parent, object.getClass().getDeclaredConstructors()[0], fields);
+
+                for (Field field : fields) {
+                    field.setAccessible(true);
+                }
+
+                if (fields.length > 0 && !Serializable.class.isAssignableFrom(fields[0].getType())) {
+                    Constructor constructor = object.getClass().getDeclaredConstructors()[0];
+                    constructor.setAccessible(true);
+
+                    Object[] parameters = new Object[constructor.getParameterTypes().length];
+
+                    if (parent.getClass().equals(fields[0].getType())) {
+                        parameters[0] = parent;
+                    } else {
+                        parameters[0] = updateObjectParent(parent, fields[0].get(object));
+                    }
+
+                    for (int i = 1; i < constructor.getParameterTypes().length; i++) {
+                        parameters[i] = fields[i].get(object);
+                    }
+
+                    return constructor.newInstance(parameters);
+                }
+
+                return object;
+            }
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static Bundle serializeObject(Fragment parent, Object object) {
         try {
             Bundle bundle = new Bundle();
             if (object instanceof Serializable) {
@@ -48,9 +113,7 @@ class TaskSerializer {
                 bundle.putString(KEY_CLASS, object.getClass().getName());
 
                 Field[] fields = object.getClass().getDeclaredFields();
-                if (fields.length != object.getClass().getDeclaredConstructors()[0].getParameterTypes().length) {
-                    throw new IllegalArgumentException("Constructor parameters do not match class fields");
-                }
+                validateConstructor(parent, object.getClass().getDeclaredConstructors()[0], fields);
 
                 for (Field field : fields) {
                     field.setAccessible(true);
@@ -87,7 +150,7 @@ class TaskSerializer {
         }
     }
 
-    private static Object deserializeObject(EasyFragment parent, Bundle bundle) {
+    private static Object deserializeObject(Fragment parent, Bundle bundle) {
         try {
             if (bundle.containsKey(KEY_SERIALIZABLE)) {
                 return bundle.getSerializable(KEY_SERIALIZABLE);
