@@ -18,7 +18,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.tananaev.fmelib.EasyFragment;
-import com.tananaev.fmelib.EasyUtil;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -28,8 +27,8 @@ import icepick.State;
 
 public class MainFragment extends EasyFragment {
 
-    public static final String KEY_USER = "user";
-    public static final int REQUEST_EXIT = 1;
+    public enum Request { EXIT }
+    public enum Data { USER }
 
     @State
     protected ArrayList<String> array;
@@ -48,7 +47,7 @@ public class MainFragment extends EasyFragment {
 
     @Override
     public CharSequence getTitle() {
-        return getArguments().getString(KEY_USER);
+        return getArguments().getString(Data.USER.name());
     }
 
     @Override
@@ -92,32 +91,35 @@ public class MainFragment extends EasyFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_EXIT && resultCode == Activity.RESULT_OK) {
+        if (requestCode == Request.EXIT.ordinal() && resultCode == Activity.RESULT_OK) {
             getActivity().finish();
         }
     }
 
     public void exit() {
-        Intent intent = EasyUtil.createDialogIntent(getContext(), ExitDialogFragment.class);
-        intent.putExtra(ExitDialogFragment.KEY_USER, getArguments().getString(KEY_USER));
-        startActivityForResult(intent, REQUEST_EXIT);
+        Bundle arguments = new Bundle();
+        arguments.putString(ExitDialogFragment.Data.USER.name(), getArguments().getString(Data.USER.name()));
+        DialogFragment fragment = new ExitDialogFragment();
+        fragment.setArguments(arguments);
+        fragment.setTargetFragment(this, Request.EXIT.ordinal());
+        fragment.show(getFragmentManager(), null);
     }
 
     public static class ExitDialogFragment extends DialogFragment {
 
-        public static final String KEY_USER = "user";
+        public enum Data { USER }
 
         @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            String user = getArguments().getString(KEY_USER);
+            String user = getArguments().getString(Data.USER.name());
             return new AlertDialog.Builder(getActivity())
                     .setMessage(user + ", are you sure you want to exit?")
                     .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                        getActivity().setResult(Activity.RESULT_OK);
+                        getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, null);
                     })
                     .setNegativeButton(android.R.string.no, (dialog, which) -> {
-                        getActivity().setResult(Activity.RESULT_CANCELED);
+                        getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_CANCELED, null);
                     })
                     .create();
         }

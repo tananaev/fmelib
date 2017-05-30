@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +11,6 @@ import android.view.ViewGroup;
 
 import com.tananaev.fmelib.EasyFragment;
 import com.tananaev.fmelib.EasyUtil;
-import com.tananaev.fmelib.Task;
-
-import java.io.Serializable;
 
 public class LoginFragment extends EasyFragment {
 
@@ -31,7 +27,7 @@ public class LoginFragment extends EasyFragment {
     public void login() {
         sendLoginRequest(user -> runWhenStarted(fragmentDestroyed -> {
             Intent intent = EasyUtil.createAliasIntent(getContext(), ".MainActivity");
-            intent.putExtra(MainFragment.KEY_USER, user);
+            intent.putExtra(MainFragment.Data.USER.name(), user);
             startActivity(intent);
         }));
     }
