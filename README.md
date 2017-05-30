@@ -11,7 +11,7 @@ Current version of the library only provides classes based on Android Support Li
 ## Download
 Just include Gradle dependency into your project:
 ```groovy
-compile 'com.tananaev:fmelib:1.1'
+compile "com.tananaev:fmelib:${version}"
 ```
 
 ## Callbacks and listeners
